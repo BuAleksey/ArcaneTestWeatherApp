@@ -9,7 +9,7 @@ import Foundation
 
 protocol CitiesListRouterInputProtocol {
     init(view: CitiesListViewController)
-    func openDetailsWeatherViewController(with city: City)
+    func openDetailsWeatherViewController(with city: String)
 }
 
 class CitiesListRouter: CitiesListRouterInputProtocol {
@@ -19,7 +19,7 @@ class CitiesListRouter: CitiesListRouterInputProtocol {
         self.view = view
     }
     
-    func openDetailsWeatherViewController(with city: City) {
+    func openDetailsWeatherViewController(with city: String) {
         view.performSegue(withIdentifier: "showDetails", sender: city)
     }
 }

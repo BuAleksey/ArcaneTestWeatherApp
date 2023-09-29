@@ -9,16 +9,16 @@ import Foundation
 
 class DataStore {
     static let shared = DataStore()
-    var cities = [City(name: "Moscow"), City(name: "London")]
+    var cities = ["Moscow", "London"]
     
     private init() {}
     
-    func addCity(_ city: City) {
+    func addCity(_ city: String) {
         cities.append(city)
     }
     
-    func removeCity(_ city: City) {
-        if let index = cities.firstIndex(where: { $0.name == city.name }) {
+    func removeCity(_ city: String) {
+        if let index = cities.firstIndex(where: { $0 == city }) {
             cities.remove(at: index)
         }
     }

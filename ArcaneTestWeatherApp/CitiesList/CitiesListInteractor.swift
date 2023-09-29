@@ -10,18 +10,20 @@ import Foundation
 protocol CitiesListInteractorInputProtocol {
     init(presenter: CitiesListInteractorOutputProtocol)
     func retrieveCities()
-    func addCity(_ city: City)
-    func removeCity(_ city: City)
+    func addCity(_ city: String)
+    func removeCity(_ city: String)
 }
 
 protocol CitiesListInteractorOutputProtocol: AnyObject {
-    func didAddCity(_ city: City)
-    func didRemoveCity(_ city: City)
-    func didRetrieveCities(_ cities: [City])
+    func didRetrieveCities(_ city: CityWeather)
+    func didAddCity(_ city: CityWeather)
+    func didRemoveCity(_ city: String)
+    func receivedError(_ error: String)
 }
 
 class CitiesListInteractor: CitiesListInteractorInputProtocol {
     private let dataStore = DataStore.shared
+    private let networkManager = NetworkManager.shared
     private unowned let presenter: CitiesListInteractorOutputProtocol
     
     required init(presenter: CitiesListInteractorOutputProtocol) {
@@ -29,15 +31,31 @@ class CitiesListInteractor: CitiesListInteractorInputProtocol {
     }
     
     func retrieveCities() {
-        presenter.didRetrieveCities(dataStore.cities)
+        dataStore.cities.forEach({ city in
+            networkManager.fetchData(city: city) { [unowned self] result in
+                switch result {
+                case  .success(let weather):
+                    self.presenter.didRetrieveCities(weather)
+                case .failure(let error):
+                    self.presenter.receivedError(error.localizedDescription)
+                }
+            }
+        })
     }
     
-    func addCity(_ city: City) {
+    func addCity(_ city: String) {
         dataStore.addCity(city)
-        presenter.didAddCity(city)
+        networkManager.fetchData(city: city) { [unowned self] result in
+            switch result {
+            case  .success(let weather):
+                self.presenter.didAddCity(weather)
+            case .failure(let error):
+                self.presenter.receivedError(error.localizedDescription)
+            }
+        }
     }
     
-    func removeCity(_ city: City) {
+    func removeCity(_ city: String) {
         dataStore.removeCity(city)
         presenter.didRemoveCity(city)
     }

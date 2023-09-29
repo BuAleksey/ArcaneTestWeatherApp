@@ -10,6 +10,7 @@
 		873877672AC43B3800CB46AF /* DetailsWeatherPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873877662AC43B3800CB46AF /* DetailsWeatherPresenter.swift */; };
 		873877692AC43B8000CB46AF /* DetailsWeatherInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873877682AC43B8000CB46AF /* DetailsWeatherInteractor.swift */; };
 		8738776B2AC43B9A00CB46AF /* DetailsWeatherConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8738776A2AC43B9A00CB46AF /* DetailsWeatherConfigurator.swift */; };
+		87465CE82AC475C8000B882A /* APIConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87465CE72AC475C8000B882A /* APIConfigurator.swift */; };
 		87EB0C302AC22BFA000E1565 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EB0C2F2AC22BFA000E1565 /* AppDelegate.swift */; };
 		87EB0C322AC22BFA000E1565 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EB0C312AC22BFA000E1565 /* SceneDelegate.swift */; };
 		87EB0C372AC22BFA000E1565 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87EB0C352AC22BFA000E1565 /* Main.storyboard */; };
@@ -24,13 +25,13 @@
 		87EB0C532AC2A84C000E1565 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EB0C522AC2A84C000E1565 /* NetworkManager.swift */; };
 		87EB0C562AC2A9E1000E1565 /* CityWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EB0C552AC2A9E1000E1565 /* CityWeather.swift */; };
 		87EB0C692AC34AF7000E1565 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EB0C682AC34AF7000E1565 /* DataStore.swift */; };
-		87EB0C6B2AC34B9F000E1565 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EB0C6A2AC34B9F000E1565 /* City.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		873877662AC43B3800CB46AF /* DetailsWeatherPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeatherPresenter.swift; sourceTree = "<group>"; };
 		873877682AC43B8000CB46AF /* DetailsWeatherInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeatherInteractor.swift; sourceTree = "<group>"; };
 		8738776A2AC43B9A00CB46AF /* DetailsWeatherConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsWeatherConfigurator.swift; sourceTree = "<group>"; };
+		87465CE72AC475C8000B882A /* APIConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigurator.swift; sourceTree = "<group>"; };
 		87EB0C2C2AC22BFA000E1565 /* ArcaneTestWeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArcaneTestWeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87EB0C2F2AC22BFA000E1565 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		87EB0C312AC22BFA000E1565 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,7 +48,6 @@
 		87EB0C522AC2A84C000E1565 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		87EB0C552AC2A9E1000E1565 /* CityWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeather.swift; sourceTree = "<group>"; };
 		87EB0C682AC34AF7000E1565 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
-		87EB0C6A2AC34B9F000E1565 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,8 +87,8 @@
 				87EB0C512AC2A822000E1565 /* Services */,
 				87EB0C542AC2A988000E1565 /* Models */,
 				87EB0C352AC22BFA000E1565 /* Main.storyboard */,
-				87EB0C382AC22BFC000E1565 /* Assets.xcassets */,
 				87EB0C3A2AC22BFC000E1565 /* LaunchScreen.storyboard */,
+				87EB0C382AC22BFC000E1565 /* Assets.xcassets */,
 				87EB0C3D2AC22BFC000E1565 /* Info.plist */,
 			);
 			path = ArcaneTestWeatherApp;
@@ -121,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				87EB0C522AC2A84C000E1565 /* NetworkManager.swift */,
+				87465CE72AC475C8000B882A /* APIConfigurator.swift */,
 				87EB0C682AC34AF7000E1565 /* DataStore.swift */,
 			);
 			path = Services;
@@ -130,7 +131,6 @@
 			isa = PBXGroup;
 			children = (
 				87EB0C552AC2A9E1000E1565 /* CityWeather.swift */,
-				87EB0C6A2AC34B9F000E1565 /* City.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,13 +212,13 @@
 				87EB0C692AC34AF7000E1565 /* DataStore.swift in Sources */,
 				87EB0C302AC22BFA000E1565 /* AppDelegate.swift in Sources */,
 				87EB0C322AC22BFA000E1565 /* SceneDelegate.swift in Sources */,
-				87EB0C6B2AC34B9F000E1565 /* City.swift in Sources */,
 				87EB0C562AC2A9E1000E1565 /* CityWeather.swift in Sources */,
 				873877692AC43B8000CB46AF /* DetailsWeatherInteractor.swift in Sources */,
 				87EB0C4E2AC22E79000E1565 /* CitiesListRouter.swift in Sources */,
 				87EB0C442AC22D3B000E1565 /* CitiesListViewController.swift in Sources */,
 				87EB0C462AC22D6A000E1565 /* DetailsWeatherViewController.swift in Sources */,
 				87EB0C4C2AC22E5E000E1565 /* CitiesListInteractor.swift in Sources */,
+				87465CE82AC475C8000B882A /* APIConfigurator.swift in Sources */,
 				87EB0C502AC22ECE000E1565 /* CitiesListConfigurator.swift in Sources */,
 				8738776B2AC43B9A00CB46AF /* DetailsWeatherConfigurator.swift in Sources */,
 			);

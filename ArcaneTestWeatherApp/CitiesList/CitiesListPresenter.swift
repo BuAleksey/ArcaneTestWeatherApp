@@ -22,36 +22,42 @@ class CitiesListPresenter: CitiesListViewOutputProtocol {
         self.view = view
     }
     
-    func viewWillAppear() {
+    func viewDidAppear() {
         interactor.retrieveCities()
     }
     
-    func showDetailsWeather(_ city: City) {
-        router.openDetailsWeatherViewController(with: city)
-    }
-    
-    func addCity(_ city: City) {
+    func addCity(_ city: String) {
         interactor.addCity(city)
     }
     
-    func removeCity(_ city: City) {
+    func removeCity(_ city: String) {
         interactor.removeCity(city)
+    }
+    
+    func showDetailsWeather(_ city: String) {
+        router.openDetailsWeatherViewController(with: city)
     }
 }
 
 // MARK: - CitiesListInteractorOutputProtocol
 extension CitiesListPresenter: CitiesListInteractorOutputProtocol {
-    func didAddCity(_ city: City) {
-        interactor.retrieveCities()
+    func didRetrieveCities(_ city: CityWeather) {
+        let tempString = String(Int(city.main.temp)) + "°C"
+        let cityAndTemp = CityAndTemp(city: city.name, temp: tempString)
+        view.showCities(cityAndTemp)
     }
     
-    func didRemoveCity(_ city: City) {
-        interactor.retrieveCities()
+    func didAddCity(_ city: CityWeather) {
+        let tempString = String(Int(city.main.temp)) + "°C"
+        let cityAndTemp = CityAndTemp(city: city.name, temp: tempString)
+        view.showCities(cityAndTemp)
     }
     
-    func didRetrieveCities(_ cities: [City]) {
-        view.showCities(cities)
+    func didRemoveCity(_ city: String) {
+        view.removeCity(city)
     }
     
-
+    func receivedError(_ error: String) {
+        view.showErrorMasage(error)
+    }
 }
