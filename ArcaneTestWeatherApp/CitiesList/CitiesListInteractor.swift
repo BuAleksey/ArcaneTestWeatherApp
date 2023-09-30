@@ -21,7 +21,7 @@ protocol CitiesListInteractorOutputProtocol: AnyObject {
     func receivedError(_ error: String)
 }
 
-class CitiesListInteractor: CitiesListInteractorInputProtocol {
+final class CitiesListInteractor: CitiesListInteractorInputProtocol {
     private let dataStore = DataStore.shared
     private let networkManager = NetworkManager.shared
     private unowned let presenter: CitiesListInteractorOutputProtocol
@@ -32,12 +32,12 @@ class CitiesListInteractor: CitiesListInteractorInputProtocol {
     
     func retrieveCities() {
         dataStore.cities.forEach({ city in
-            networkManager.fetchData(city: city) { [unowned self] result in
+            networkManager.fetchData(city: city) { [weak self] result in
                 switch result {
                 case  .success(let weather):
-                    self.presenter.didRetrieveCities(weather)
+                    self?.presenter.didRetrieveCities(weather)
                 case .failure(let error):
-                    self.presenter.receivedError(error.localizedDescription)
+                    self?.presenter.receivedError(error.localizedDescription)
                 }
             }
         })
@@ -45,12 +45,12 @@ class CitiesListInteractor: CitiesListInteractorInputProtocol {
     
     func addCity(_ city: String) {
         dataStore.addCity(city)
-        networkManager.fetchData(city: city) { [unowned self] result in
+        networkManager.fetchData(city: city) { [weak self] result in
             switch result {
             case  .success(let weather):
-                self.presenter.didAddCity(weather)
+                self?.presenter.didAddCity(weather)
             case .failure(let error):
-                self.presenter.receivedError(error.localizedDescription)
+                self?.presenter.receivedError(error.localizedDescription)
             }
         }
     }

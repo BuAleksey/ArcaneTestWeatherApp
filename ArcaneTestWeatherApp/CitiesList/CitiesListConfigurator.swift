@@ -11,7 +11,7 @@ protocol CitiesListConfiguratorInputProtocol {
     func configure(withView view: CitiesListViewController)
 }
 
-class CitiesListConfigurator: CitiesListConfiguratorInputProtocol {
+final class CitiesListConfigurator: CitiesListConfiguratorInputProtocol {
     func configure(withView view: CitiesListViewController) {
         let presenter = CitiesListPresenter(view: view)
         let interactor = CitiesListInteractor(presenter: presenter)

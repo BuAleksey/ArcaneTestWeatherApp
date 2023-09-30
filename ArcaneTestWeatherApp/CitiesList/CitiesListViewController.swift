@@ -21,10 +21,15 @@ protocol CitiesListViewOutputProtocol {
     func showDetailsWeather(_ city: String)
 }
 
-class CitiesListViewController: UITableViewController {
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
-    
+final class CitiesListViewController: UITableViewController {
     var presenter: CitiesListViewOutputProtocol!
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
     
     private var configurator: CitiesListConfiguratorInputProtocol = CitiesListConfigurator()
     private var cities: [CityAndTemp] = [] {
@@ -35,19 +40,14 @@ class CitiesListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         configurator.configure(withView: self)
-        activityIndicator.hidesWhenStopped = true
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")      
+        setupNavigationBar()
+        setupConstraints()
+        
         presenter.viewDidAppear()
         activityIndicator.startAnimating()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let detailsVC = segue.destination as? DetailsWeatherViewController else {
-            return
-        }
-        let configurator: DetailsWeatherConfiguratorInputProtocol = DetailsWeatherConfigurator()
-        configurator.configure(withView: detailsVC, and: sender as! String)
     }
     
     @IBAction func addCity(_ sender: UIBarButtonItem) {
@@ -92,7 +92,28 @@ class CitiesListViewController: UITableViewController {
         }
     }
     
-    private func showAddCityAlet() {
+    private func setupConstraints() {
+        view.addSubview(activityIndicator)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.title = "Cities"
+        
+        let searchBtn = UIBarButtonItem(
+            image: UIImage(systemName: "magnifyingglass"),
+            style: .plain,
+            target: self,
+            action: #selector(showAddCityAlet)
+        )
+        navigationItem.rightBarButtonItem = searchBtn
+    }
+    
+    @objc private func showAddCityAlet() {
         let alertController = UIAlertController(
             title: "Add city",
             message: "Enter city name",

@@ -13,7 +13,7 @@ class NetworkManager {
     private init() {}
     
     func fetchData(city: String,completion: @escaping (Result<CityWeather, Error>) -> Void) {
-        guard let url = URL(string: apiConfigurator.getAPI(city: city)) else { return }
+            guard let url = URL(string: apiConfigurator.getAPIForCity(city: city)) else { return }
         
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data else {

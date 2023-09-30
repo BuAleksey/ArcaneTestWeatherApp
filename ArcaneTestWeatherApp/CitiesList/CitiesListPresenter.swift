@@ -12,7 +12,7 @@ struct CityAndTemp {
     let temp: String
 }
 
-class CitiesListPresenter: CitiesListViewOutputProtocol {
+final class CitiesListPresenter: CitiesListViewOutputProtocol {
     var interactor: CitiesListInteractorInputProtocol!
     var router: CitiesListRouterInputProtocol!
     
@@ -35,21 +35,21 @@ class CitiesListPresenter: CitiesListViewOutputProtocol {
     }
     
     func showDetailsWeather(_ city: String) {
-        router.openDetailsWeatherViewController(with: city)
+        router.presentDetailsWeatherViewController(with: city)
     }
 }
 
 // MARK: - CitiesListInteractorOutputProtocol
 extension CitiesListPresenter: CitiesListInteractorOutputProtocol {
     func didRetrieveCities(_ city: CityWeather) {
-        let tempString = String(Int(city.main.temp)) + "°C"
-        let cityAndTemp = CityAndTemp(city: city.name, temp: tempString)
+        let tempString = String(Int(city.list.first?.main.temp ?? 0)) + "°C"
+        let cityAndTemp = CityAndTemp(city: city.city.name, temp: tempString)
         view.showCities(cityAndTemp)
     }
     
     func didAddCity(_ city: CityWeather) {
-        let tempString = String(Int(city.main.temp)) + "°C"
-        let cityAndTemp = CityAndTemp(city: city.name, temp: tempString)
+        let tempString = String(Int(city.list.first?.main.temp ?? 0)) + "°C"
+        let cityAndTemp = CityAndTemp(city: city.city.name, temp: tempString)
         view.showCities(cityAndTemp)
     }
     

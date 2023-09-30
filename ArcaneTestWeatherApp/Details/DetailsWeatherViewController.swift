@@ -8,60 +8,116 @@
 import UIKit
 
 protocol DetailsWeatherViewInputProtocol: AnyObject {
-    func displayCityName(with name: String)
-    func displayTemp(with temp: String)
-    func displayWind(with wind: String)
-    func displayImage(with image: String)
+    func showWeatherForTooday(_ weather: [DetailsWether])
+    func showWeatherForNextDay(_ weather: [DetailsWether])
     func showErrorMasage(_ message: String)
 }
 
 protocol DetailsWeatherViewOutputProtocol {
     init(view: DetailsWeatherViewInputProtocol)
-    func showDetails()
+    func viewDidAppear()
+    func showMoreDays()
 }
 
-class DetailsWeatherViewController: UIViewController {
-    @IBOutlet var stackView: UIStackView!
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var cityLabel: UILabel!
-    @IBOutlet var tempLabel: UILabel!
-    @IBOutlet var windLabel: UILabel!
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
-    
+final class DetailsWeatherViewController: UITableViewController {
     var presenter: DetailsWeatherViewOutputProtocol!
-        
+    var showingMoreWeather = false {
+        didSet {
+            setupNavigationBar()
+        }
+    }
+
+    private let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+    private var days: [DetailsWether] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.showDetails()
-        stackView.isHidden = true
-        activityIndicator.hidesWhenStopped = true
+        presenter.viewDidAppear()
+
+        tableView.register(DetailsWeatherViewCell.self, forCellReuseIdentifier: "detailWeatherCell")
+        tableView.separatorStyle = .none
+        
+        setupConstraints()
         activityIndicator.startAnimating()
+    }
+    
+    // MARK: - Table view data source
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        days.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "detailWeatherCell", for: indexPath) as! DetailsWeatherViewCell
+        let day = days[indexPath.row]
+        cell.detailsWeather = day
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    private func setupConstraints() {
+        view.addSubview(activityIndicator)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private func setupNavigationBar() {
+        let city = days.first?.city
+        navigationItem.title = city
+        
+        let moreBtn = UIBarButtonItem(
+            title: showingMoreWeather ? "Today" : "More",
+            style: .plain,
+            target: self,
+            action: #selector(showMore)
+        )
+        navigationItem.rightBarButtonItem = moreBtn
+    }
+    
+    @objc private func showMore() {
+        if showingMoreWeather {
+            presenter.viewDidAppear()
+            showingMoreWeather.toggle()
+        } else {
+            presenter.showMoreDays()
+            showingMoreWeather.toggle()
+        }
     }
 }
 
 // MARK: - DetailsWeatherViewInputProtocol
 extension DetailsWeatherViewController: DetailsWeatherViewInputProtocol {
-    func displayCityName(with name: String) {
-        self.activityIndicator.stopAnimating()
-        stackView.isHidden.toggle()
-        cityLabel.text = name
+    func showWeatherForTooday(_ weather: [DetailsWether]) {
+        days = weather
+        activityIndicator.stopAnimating()
+        setupNavigationBar()
     }
     
-    func displayTemp(with temp: String) {
-        self.activityIndicator.stopAnimating()
-        tempLabel.text = temp
+    func showWeatherForNextDay(_ weather: [DetailsWether]) {
+        activityIndicator.startAnimating()
+        days.removeAll()
+        days = weather
+        activityIndicator.stopAnimating()
     }
-    
-    func displayWind(with wind: String) {
-        self.activityIndicator.stopAnimating()
-        windLabel.text = wind
-    }
-    
-    func displayImage(with image: String) {
-        self.activityIndicator.stopAnimating()
-        imageView.image = UIImage(systemName: image)
-    }
-    
+
     func showErrorMasage(_ message: String) {
         DispatchQueue.main.async { [unowned self] in
             self.activityIndicator.stopAnimating()

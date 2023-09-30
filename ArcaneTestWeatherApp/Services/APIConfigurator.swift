@@ -13,7 +13,9 @@ final class APIConfigurator {
     
     private init() {}
     
-    func getAPI(city: String) -> String {
-        "https://api.openweathermap.org/data/2.5/weather?q=\(city)&apikey=\(apiKey)&units=metric"
+    func getAPIForCity(city: String) -> String {
+        "http://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=metric"
     }
+    
+    
 }

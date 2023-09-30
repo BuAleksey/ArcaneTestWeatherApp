@@ -9,17 +9,20 @@ import Foundation
 
 protocol CitiesListRouterInputProtocol {
     init(view: CitiesListViewController)
-    func openDetailsWeatherViewController(with city: String)
+    func presentDetailsWeatherViewController(with city: String)
 }
 
-class CitiesListRouter: CitiesListRouterInputProtocol {
+final class CitiesListRouter: CitiesListRouterInputProtocol {
     private unowned let view: CitiesListViewController
     
     required init(view: CitiesListViewController) {
         self.view = view
     }
     
-    func openDetailsWeatherViewController(with city: String) {
-        view.performSegue(withIdentifier: "showDetails", sender: city)
+    func presentDetailsWeatherViewController(with city: String) {
+        let detailVC = DetailsWeatherViewController()
+        view.navigationController?.pushViewController(detailVC, animated: true)
+        let configurator: DetailsWeatherConfiguratorInputProtocol = DetailsWeatherConfigurator()
+        configurator.configure(withView: detailVC, and: city)
     }
 }

@@ -8,9 +8,14 @@
 import Foundation
 
 struct CityWeather: Decodable {
-    let name: String
-    let weather: [Weather]
+    let list: [List]
+    let city: City
+}
+
+struct List: Decodable {
+    let dt: Int
     let main: Main
+    let weather: [Weather]
     let wind: Wind
 }
 
@@ -20,9 +25,8 @@ struct Main: Decodable {
 
 struct Weather: Decodable {
     let id: Int
-    let main: String
     
-    var systemIcon: String {
+    var systemIcon: String? {
         switch id {
         case 200...232: return "cloud.bolt.rain.fill"
         case 300...321: return "cloud.drizzle.fill"
@@ -38,4 +42,8 @@ struct Weather: Decodable {
 
 struct Wind: Decodable {
     let speed: Double
+}
+
+struct City: Decodable {
+    let name: String
 }
