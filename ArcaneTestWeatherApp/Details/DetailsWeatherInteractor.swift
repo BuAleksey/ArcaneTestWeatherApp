@@ -44,7 +44,6 @@ final class DetailsWeatherInteractor: DetailsWeatherInteractorInputProtocol {
             networkManager.fetchData(city: city) { [weak self] result in
                 switch result {
                 case  .success(let weather):
-                    print(weather)
                     self?.presenter.didRetrieveMoreWeather(weather: weather)
                 case .failure(let error):
                     self?.presenter.receivedError(error.localizedDescription)
