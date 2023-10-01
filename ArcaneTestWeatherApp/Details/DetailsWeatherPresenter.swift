@@ -39,7 +39,7 @@ extension DetailsWeatherPresenter: DetailsWeatherInteractorOutputProtocol {
         var detailsWetherArray: [DetailsWether] = []
         weather.list.forEach { weatherDetails in
             if dateManager.getCurrentUnixTimeInteval().contains(weatherDetails.dt) {
-                let date = dateManager.getDateFromUnix(weatherDetails.dt)
+                let date = dateManager.getDateFromUnix(weatherDetails.dt, dateOrTime: .today)
                 let tempString = String(Int(weatherDetails.main.temp)) + "°C"
                 let windString = String(Int(weatherDetails.wind.speed)) + "m/s"
                 let systemIcon = weatherDetails.weather.first?.systemIcon ?? ""
@@ -61,7 +61,7 @@ extension DetailsWeatherPresenter: DetailsWeatherInteractorOutputProtocol {
         var detailsWetherArray: [DetailsWether] = []
         weather.list.forEach { weatherDetails in
             if !dateManager.getCurrentUnixTimeInteval().contains(weatherDetails.dt) {
-                let date = dateManager.getDateFromUnix(weatherDetails.dt)
+                let date = dateManager.getDateFromUnix(weatherDetails.dt, dateOrTime: .moreDays)
                 let tempString = String(Int(weatherDetails.main.temp)) + "°C"
                 let windString = String(Int(weatherDetails.wind.speed)) + "m/s"
                 let systemIcon = weatherDetails.weather.first?.systemIcon ?? ""

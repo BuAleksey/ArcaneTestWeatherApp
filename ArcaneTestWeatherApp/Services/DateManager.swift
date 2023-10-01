@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum DateOrTime {
+    case today
+    case moreDays
+}
+
 final class DateManager {
     static let shared = DateManager()
     
@@ -16,7 +21,7 @@ final class DateManager {
     
     private init() {}
 
-    func getCurrentUnixTimeInteval() -> ClosedRange<Int> {        
+    func getCurrentUnixTimeInteval() -> Range<Int> {        
         let start = calendar.startOfDay(for: currentDate)
         let startUnixTimestamp = start.timeIntervalSince1970
         let startUnixTimestampInt = Int(startUnixTimestamp)
@@ -25,11 +30,16 @@ final class DateManager {
         let endUnixTimestamp = end.timeIntervalSince1970
         let endUnixTimestampInt = Int(endUnixTimestamp)
         
-        return startUnixTimestampInt...endUnixTimestampInt
+        return startUnixTimestampInt..<endUnixTimestampInt
     }
     
-    func getDateFromUnix(_ unixDate: Int) -> String {
-        dateFormatter.dateFormat = "dd.MM.yyyy"
+    func getDateFromUnix(_ unixDate: Int, dateOrTime: DateOrTime) -> String {
+        switch dateOrTime {
+        case .today:
+            dateFormatter.timeStyle = .short
+        case .moreDays:
+            dateFormatter.dateFormat = "dd/MM HH:MM"
+        }
         let date = Date(timeIntervalSince1970: TimeInterval(unixDate))
         let formattedDate = dateFormatter.string(from: date)
         return formattedDate
