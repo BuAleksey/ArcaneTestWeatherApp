@@ -20,6 +20,9 @@ final class DetailsWeatherViewCell: UITableViewCell {
     let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.gray.cgColor
+        view.layer.cornerRadius = 5
         return view
     }()
     private let dateLabel: UILabel = {
@@ -60,13 +63,20 @@ final class DetailsWeatherViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             containerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            containerView.widthAnchor.constraint(equalToConstant: 300),
+            containerView.widthAnchor.constraint(equalToConstant: 350),
             containerView.heightAnchor.constraint(equalToConstant: 30),
             
             dateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 6),
+            dateLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            
             imageWeather.leadingAnchor.constraint(equalTo: centerXAnchor, constant: -30),
+            imageWeather.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            
             tempLabel.leadingAnchor.constraint(equalTo: centerXAnchor, constant: 30),
-            windLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -6)
+            tempLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            
+            windLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -6),
+            windLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
     }
     
